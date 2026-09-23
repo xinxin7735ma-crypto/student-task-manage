@@ -19,10 +19,23 @@ public class Main {
         System.out.println("0. 退出");
         System.out.println("请输入选择：");
         int choice = scanner.nextInt();
-        System.out.println("我的任务列表：");
+        switch (choice) {
+            case 1:
+                System.out.println("我的任务列表：");
 
-        for (Task task : tasks) {
-            System.out.println(task);
+                for (Task task : tasks) {
+                    System.out.println(task);
+                }
+
+                break;
+
+            case 4:
+                System.out.println("程序退出");
+                break;
+
+            default:
+                System.out.println("输入错误");
         }
+
     }
 }
