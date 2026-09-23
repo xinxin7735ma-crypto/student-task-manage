@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.util.scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         ArrayList<Task> tasks = new ArrayList<>();
 
         tasks.add(new Task("完成数据结构作业", "数据结构"));
