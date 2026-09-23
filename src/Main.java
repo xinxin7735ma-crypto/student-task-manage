@@ -11,7 +11,13 @@ public class Main {
         tasks.add(new Task("学习 Java 集合框架", "Java"));
 
         tasks.get(0).markCompleted();
-
+        
+        System.out.println("======任务管理系统======");
+        System.out.println("1. 查看任务");
+        System.out.println("2. 添加任务");
+        System.out.println("3. 标记完成");
+        System.out.println("0. 退出");
+        System.out.println("请输入选择：");
         System.out.println("我的任务列表：");
 
         for (Task task : tasks) {
