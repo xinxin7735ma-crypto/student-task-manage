@@ -18,15 +18,24 @@ public class Main {
         System.out.println("3. 标记完成");
         System.out.println("0. 退出");
         System.out.println("请输入选择：");
+        while (true) {
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
                 System.out.println("我的任务列表：");
 
-                for (Task task : tasks) {
+                for (Task task : tasks)
+                {
                     System.out.println(task);
                 }
+                break;
 
+            case 2:
+                System.out.println("请输入任务名称：");
+                String name = scanner.next();
+                System.out.println("请输入任务分类");
+                String course =scanner.next();
+                tasks.add(new Task(name, course));
                 break;
 
             case 4:
@@ -35,6 +44,7 @@ public class Main {
 
             default:
                 System.out.println("输入错误");
+                       }
         }
 
     }
