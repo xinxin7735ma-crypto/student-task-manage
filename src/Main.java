@@ -23,10 +23,9 @@ public class Main {
         switch (choice) {
             case 1:
                 System.out.println("我的任务列表：");
-
-                for (Task task : tasks)
+                for (int i = 0;i <tasks.size();i++)
                 {
-                    System.out.println(task);
+                    System.out.println((i+1)+"."+ tasks.get(i));
                 }
                 break;
 
@@ -42,7 +41,7 @@ public class Main {
                 System.out.println("请输入要完成的任务编号");
                 int index = scanner.nextInt();
                 tasks.get(index - 1).markCompleted();
-                System.out.println("任务已完成！");1
+                System.out.println("任务已完成！");
                 break;
 
             case 4:
