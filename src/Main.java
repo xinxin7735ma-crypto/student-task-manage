@@ -38,6 +38,13 @@ public class Main {
                 tasks.add(new Task(name, course));
                 break;
 
+            case 3:
+                System.out.println("请输入要完成的任务编号");
+                int index = scanner.nextInt();
+                tasks.get(index - 1).markCompleted();
+                System.out.println("任务已完成！");1
+                break;
+
             case 4:
                 System.out.println("程序退出");
                 break;
