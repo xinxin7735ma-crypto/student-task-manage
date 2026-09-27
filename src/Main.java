@@ -4,13 +4,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+        TaskManager manager = new TaskManager();
 
-        tasks.add(new Task("完成数据结构作业",  "数据结构"));
-        tasks.add(new Task("复习六级单词", "英语"));
-        tasks.add(new Task("学习 Java 集合框架", "Java"));
+        manager.addTask(new Task("完成数据结构作业", "数据结构"));
+        manager.addTask(new Task("复习六级单词", "英语"));
+        manager.addTask(new Task("学习 Java 集合框架", "Java"));
 
-        tasks.get(0).markCompleted();
+        manager.markCompleted(0);
         
         System.out.println("======任务管理系统======");
         System.out.println("1. 查看任务");
@@ -23,9 +23,9 @@ public class Main {
         switch (choice) {
             case 1:
                 System.out.println("我的任务列表：");
-                for (int i = 0;i <tasks.size();i++)
+                for (int i = 0;i < manager.getTasks().size();i++)
                 {
-                    System.out.println((i+1)+"."+ tasks.get(i));
+                    System.out.println((i+1)+"."+ manager.getTasks().get(i));
                 }
                 break;
 
@@ -34,13 +34,13 @@ public class Main {
                 String name = scanner.next();
                 System.out.println("请输入任务分类");
                 String course =scanner.next();
-                tasks.add(new Task(name, course));
+                manager.addTask(new Task(name, course));
                 break;
 
             case 3:
                 System.out.println("请输入要完成的任务编号");
                 int index = scanner.nextInt();
-                tasks.get(index - 1).markCompleted();
+                manager.markCompleted(0);
                 System.out.println("任务已完成！");
                 break;
 
