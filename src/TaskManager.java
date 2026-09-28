@@ -6,6 +6,7 @@ public class TaskManager {
     {
         tasks.add(task);
     }
+    public void deleteTask(int index) {tasks.remove(index);}
     public void markCompleted(int index)
     {
         tasks.get(index).markCompleted();

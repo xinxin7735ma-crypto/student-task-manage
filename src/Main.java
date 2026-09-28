@@ -16,6 +16,7 @@ public class Main {
         System.out.println("1. 查看任务");
         System.out.println("2. 添加任务");
         System.out.println("3. 标记完成");
+        System.out.println("4. 删除任务");
         System.out.println("0. 退出");
         System.out.println("请输入选择：");
         while (true) {
@@ -45,7 +46,10 @@ public class Main {
                 break;
 
             case 4:
-                System.out.println("程序退出");
+                System.out.println("请输入要删除的任务编号");
+                int deleteIndex = scanner.nextInt();
+                manager.deleteTask(deleteIndex - 1);
+                System.out.println("删除成功！");
                 break;
 
             default:
