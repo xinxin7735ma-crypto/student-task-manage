@@ -5,12 +5,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         TaskManager manager = new TaskManager();
+        manager.loadFromFile();
 
-        manager.addTask(new Task("完成数据结构作业", "数据结构"));
-        manager.addTask(new Task("复习六级单词", "英语"));
-        manager.addTask(new Task("学习 Java 集合框架", "Java"));
-
-        manager.markCompleted(0);
         
         System.out.println("======任务管理系统======");
         System.out.println("1. 查看任务");
@@ -41,7 +37,7 @@ public class Main {
             case 3:
                 System.out.println("请输入要完成的任务编号");
                 int index = scanner.nextInt();
-                manager.markCompleted(0);
+                manager.markCompleted(index - 1);
                 System.out.println("任务已完成！");
                 break;
 
@@ -55,7 +51,7 @@ public class Main {
             case 5:
                 manager.saveToFile();
                 System.out.println("退出");
-                break;
+                return;
 
             default:
                 System.out.println("输入错误");

@@ -27,7 +27,7 @@ public class TaskManager {
     public void saveToFile()
     {
         try {
-            FileWriter writer = new FileWriter("task.txt");
+            FileWriter writer = new FileWriter("tasks.txt");
             for (Task task : tasks)
             {
                 writer.write(task.getTitle() + ","
@@ -51,17 +51,23 @@ public class TaskManager {
 
             String line;
 
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+            while ((line = reader.readLine()) != null)
+            {
+                String[] data = line.split(",");
+                Task task = new Task(data[0], data[1]);
+                if (data[2].equals("true"))
+                {
+                    task.markCompleted();
+                }
+                tasks.add(task);
             }
 
             reader.close();
 
-        } catch (Exception e)
-        {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
 
