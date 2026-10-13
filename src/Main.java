@@ -13,7 +13,8 @@ public class Main {
         System.out.println("2. 添加任务");
         System.out.println("3. 标记完成");
         System.out.println("4. 删除任务");
-        System.out.println("5. 退出");
+        System.out.println("5. 修改任务");
+        System.out.println("6. 退出");
         System.out.println("请输入选择：");
         while (true) {
         int choice = scanner.nextInt();

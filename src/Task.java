@@ -24,6 +24,16 @@ public class Task {
     public void markCompleted() {
         completed = true;
     }
+    //修改
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public void setCourse(String course)
+    {
+        this.course = course;
+    }
 
     @Override
     public String toString() {

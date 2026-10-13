@@ -13,6 +13,14 @@ public class TaskManager {
     }
     //删除任务
     public void deleteTask(int index) {tasks.remove(index);}
+    //修改任务
+    public void updateTask(int index, String title, String course)
+    {
+        Task task = tasks.get(index);
+
+        task.setTitle(title);
+        task.setCourse(course);
+    }
     //标记状态
     public void markCompleted(int index)
     {
