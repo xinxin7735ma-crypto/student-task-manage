@@ -50,9 +50,20 @@ public class Main {
                 break;
 
             case 5:
-                manager.saveToFile();
-                System.out.println("退出");
-                return;
+                System.out.println("请输入要修改的任务编号");
+
+                int updateIndex = scanner.nextInt();
+
+                System.out.println("请输入新的任务名称");
+                String newName = scanner.next();
+
+                System.out.println("请输入新的任务分类");
+                String newCourse = scanner.next();
+
+                manager.updateTask(updateIndex - 1, newName, newCourse);
+
+                System.out.println("修改成功！");
+                break;
 
             default:
                 System.out.println("输入错误");
