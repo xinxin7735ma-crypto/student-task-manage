@@ -6,27 +6,26 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 public class TaskManager {
     ArrayList<Task>tasks = new ArrayList<>();
-    //添加任务
+    //添加任务：把传入的任务放进任务列表
     public void addTask(Task task)
     {
         tasks.add(task);
     }
-    //删除任务
+    //删除任务：根据下标删除对应任务（remove：下标 index:任务在列表中的位置）
     public void deleteTask(int index) {tasks.remove(index);}
     //修改任务
     public void updateTask(int index, String title, String course)
     {
         Task task = tasks.get(index);
-
-        task.setTitle(title);
-        task.setCourse(course);
+        task.setTitle(title);//名称
+        task.setCourse(course);//课程
     }
-    //标记状态
+    //标记状态：找到指定任务，并标记为已完成
     public void markCompleted(int index)
     {
         tasks.get(index).markCompleted();
     }
-    //查看任务
+    //查看任务:获取任务列表，返回当前保存的所有任务
     public ArrayList<Task> getTasks()
     {
         return tasks;

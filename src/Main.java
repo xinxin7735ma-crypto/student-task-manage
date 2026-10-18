@@ -7,7 +7,7 @@ public class Main {
         TaskManager manager = new TaskManager();
         manager.loadFromFile();
 
-        
+
         System.out.println("======任务管理系统======");
         System.out.println("1. 查看任务");
         System.out.println("2. 添加任务");
@@ -17,58 +17,87 @@ public class Main {
         System.out.println("6. 退出");
         System.out.println("请输入选择：");
         while (true) {
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                System.out.println("我的任务列表：");
-                for (int i = 0;i < manager.getTasks().size();i++)
-                {
-                    System.out.println((i+1)+"."+ manager.getTasks().get(i));
-                }
-                break;
+            int choice;
 
-            case 2:
-                System.out.println("请输入任务名称：");
-                String name = scanner.next();
-                System.out.println("请输入任务分类");
-                String course =scanner.next();
-                manager.addTask(new Task(name, course));
-                break;
+            try {
+                choice = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("请输入数字！");
+                scanner.nextLine();
+                continue;
+            }
+            switch (choice) {
+                case 1:
+                    System.out.println("我的任务列表：");
+                    for (int i = 0; i < manager.getTasks().size(); i++) {
+                        System.out.println((i + 1) + "." + manager.getTasks().get(i));
+                    }
+                    break;
 
-            case 3:
-                System.out.println("请输入要完成的任务编号");
-                int index = scanner.nextInt();
-                manager.markCompleted(index - 1);
-                System.out.println("任务已完成！");
-                break;
+                case 2:
+                    System.out.println("请输入任务名称：");
+                    String name = scanner.next();
+                    System.out.println("请输入任务分类");
+                    String course = scanner.next();
+                    manager.addTask(new Task(name, course));
+                    break;
 
-            case 4:
-                System.out.println("请输入要删除的任务编号");
-                int deleteIndex = scanner.nextInt();
-                manager.deleteTask(deleteIndex - 1);
-                System.out.println("删除成功！");
-                break;
+                case 3:
+                    System.out.println("请输入要完成的任务编号");
+                    int index = scanner.nextInt();
 
-            case 5:
-                System.out.println("请输入要修改的任务编号");
+                    if (index > 0 && index <= manager.getTasks().size()) {
 
-                int updateIndex = scanner.nextInt();
+                        manager.markCompleted(index - 1);
+                        System.out.println("任务已完成！");
 
-                System.out.println("请输入新的任务名称");
-                String newName = scanner.next();
+                    } else {
+                        System.out.println("没有这个任务编号！");
+                    }
 
-                System.out.println("请输入新的任务分类");
-                String newCourse = scanner.next();
+                    break;
 
-                manager.updateTask(updateIndex - 1, newName, newCourse);
+                case 4:
+                    System.out.println("请输入要删除的任务编号");
+                    int deleteIndex = scanner.nextInt();
 
-                System.out.println("修改成功！");
-                break;
+                    if (deleteIndex > 0 && deleteIndex <= manager.getTasks().size()) {
+                        manager.deleteTask(deleteIndex - 1);
+                        System.out.println("删除成功！");
+                    } else {
+                        System.out.println("没有这个任务编号！");
+                    }
 
-            default:
-                System.out.println("输入错误");
-                       }
+                    break;
+
+                case 5:
+                    System.out.println("请输入要修改的任务编号");
+
+                    int updateIndex = scanner.nextInt();
+
+                    if (updateIndex > 0 && updateIndex <= manager.getTasks().size()) {
+                        System.out.println("请输入新的任务名称");
+                        String newName = scanner.next();
+
+                        System.out.println("请输入新的任务分类");
+                        String newCourse = scanner.next();
+
+                        manager.updateTask(updateIndex - 1, newName, newCourse);
+
+                        System.out.println("修改成功！");
+
+                    } else {
+                        System.out.println("没有这个任务编号！");
+                    }
+
+                    break;
+
+                case 6:
+                    manager.saveToFile();
+                    System.out.println("退出");
+                    return;
+            }
+
         }
-
     }
 }
