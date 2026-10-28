@@ -35,6 +35,7 @@ public class TaskManager {
     {
         try {
             FileWriter writer = new FileWriter("tasks.txt");
+            System.out.println(new java.io.File("tasks.txt").getAbsolutePath());
             for (Task task : tasks)
             {
                 writer.write(task.getTitle() + ","
@@ -53,11 +54,10 @@ public class TaskManager {
     //读档
     public void loadFromFile()
     {
-        try {
+        try
+        {
             BufferedReader reader = new BufferedReader(new FileReader("tasks.txt"));
-
             String line;
-
             while ((line = reader.readLine()) != null)
             {
                 String[] data = line.split(",");
@@ -72,7 +72,8 @@ public class TaskManager {
             reader.close();
 
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }

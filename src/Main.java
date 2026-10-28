@@ -34,13 +34,17 @@ public class Main {
                     }
                     break;
 
+
                 case 2:
                     System.out.println("请输入任务名称：");
-                    String name = scanner.next();
-                    System.out.println("请输入任务分类");
-                    String course = scanner.next();
+                    scanner.nextLine(); // 读取上一次输入留下的回车
+                    String name = scanner.nextLine(); // 读取完整任务名称
+                    System.out.println("请输入任务分类：");
+                    String course = scanner.nextLine(); // 读取完整任务分类
                     manager.addTask(new Task(name, course));
+                    System.out.println("添加成功");
                     break;
+
 
                 case 3:
                     System.out.println("请输入要完成的任务编号");
