@@ -50,12 +50,14 @@ public class Main {
                     System.out.println("请输入要完成的任务编号");
                     int index = scanner.nextInt();
 
-                    if (index > 0 && index <= manager.getTasks().size()) {
+                    if (index > 0 && index <= manager.getTasks().size())
+                    {
 
                         manager.markCompleted(index - 1);
                         System.out.println("任务已完成！");
 
-                    } else {
+                    } else
+                    {
                         System.out.println("没有这个任务编号！");
                     }
 
@@ -65,10 +67,12 @@ public class Main {
                     System.out.println("请输入要删除的任务编号");
                     int deleteIndex = scanner.nextInt();
 
-                    if (deleteIndex > 0 && deleteIndex <= manager.getTasks().size()) {
+                    if (deleteIndex > 0 && deleteIndex <= manager.getTasks().size())
+                    {
                         manager.deleteTask(deleteIndex - 1);
                         System.out.println("删除成功！");
-                    } else {
+                    } else
+                    {
                         System.out.println("没有这个任务编号！");
                     }
 
@@ -78,19 +82,21 @@ public class Main {
                     System.out.println("请输入要修改的任务编号");
 
                     int updateIndex = scanner.nextInt();
+                    scanner.nextLine();
 
                     if (updateIndex > 0 && updateIndex <= manager.getTasks().size()) {
                         System.out.println("请输入新的任务名称");
-                        String newName = scanner.next();
+                        String newName = scanner.nextLine();
 
                         System.out.println("请输入新的任务分类");
-                        String newCourse = scanner.next();
+                        String newCourse = scanner.nextLine();
 
                         manager.updateTask(updateIndex - 1, newName, newCourse);
 
                         System.out.println("修改成功！");
 
-                    } else {
+                    } else
+                    {
                         System.out.println("没有这个任务编号！");
                     }
 
@@ -100,6 +106,9 @@ public class Main {
                     manager.saveToFile();
                     System.out.println("退出");
                     return;
+                default:
+                    System.out.println("没有这个选项，请输入1-6");
+                    break;
             }
 
         }
