@@ -5,7 +5,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         TaskManager manager = new TaskManager();
-        manager.loadFromFile();
+        manager.loadFromDb();
+
 
 
         System.out.println("======任务管理系统======");
@@ -41,7 +42,7 @@ public class Main {
                     String name = scanner.nextLine(); // 读取完整任务名称
                     System.out.println("请输入任务分类：");
                     String course = scanner.nextLine(); // 读取完整任务分类
-                    manager.addTask(new Task(name, course));
+                    manager.addTask(name, course);
                     System.out.println("添加成功");
                     break;
 
@@ -103,12 +104,8 @@ public class Main {
                     break;
 
                 case 6:
-                    manager.saveToFile();
                     System.out.println("退出");
                     return;
-                default:
-                    System.out.println("没有这个选项，请输入1-6");
-                    break;
             }
 
         }

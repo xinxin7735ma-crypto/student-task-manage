@@ -1,26 +1,26 @@
 public class Task {
+    private int id;
     private String title;
     private String course;
     private boolean completed;
 
-    public Task(String title, String course) {
+    public Task(int id,String title, String course) {
+        this.id = id;
         this.title = title;
         this.course = course;
         this.completed = false;
     }
 
+    public int getId(){return id;}
     public String getTitle() {
         return title;
     }
-
     public String getCourse() {
         return course;
     }
-
     public boolean isCompleted() {
         return completed;
     }
-
     public void markCompleted() {
         completed = true;
     }
@@ -29,7 +29,6 @@ public class Task {
     {
         this.title = title;
     }
-
     public void setCourse(String course)
     {
         this.course = course;

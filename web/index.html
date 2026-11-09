@@ -252,7 +252,7 @@
 <div class="layout">
     <aside class="sidebar">
         <div class="logo">✦ 学习空间</div>
-        <div class="nav-item" data-page="all">任务总览</div>
+        <div class="nav-item active" data-page="all">任务总览</div>
         <div class="nav-item" data-page="today">今日任务</div>
         <div class="nav-item" data-page="completed">已完成</div>
     </aside>
@@ -264,21 +264,21 @@
                 <div class="subtitle">把每一件小事，慢慢做好。</div>
 
             </div>
-            <div class="date">Study Dashboard</div>
+            <div class="date" id="dateLabel"></div>
         </div>
 
         <section class="stats">
             <div class="stat-card">
                 <div class="stat-label">全部任务</div>
-                <div class="stat-number" id="totalTasks">3</div>
+                <div class="stat-number" id="totalTasks">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">已完成</div>
-                <div class="stat-number"id="completedTasks">1</div>
+                <div class="stat-number" id="completedTasks">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">完成进度</div>
-                <div class="stat-number"id="completionRate">33%</div>
+                <div class="stat-number" id="completionRate">0%</div>
             </div>
         </section>
 
@@ -287,34 +287,7 @@
                 <h2>任务列表</h2>
                 <button class="add-button" id="addTaskBtn">+ 添加任务</button>
             </div>
-            <div id="taskList">
-            <div class="task-item done">
-                <input type="checkbox" checked>
-                <div class="task-info">
-                    <div class="task-title">完成 Java 基础复习</div>
-                    <div class="task-course">Java 程序设计</div>
-                </div>
-                <span class="task-status">已完成</span>
-            </div>
-
-            <div class="task-item">
-                <input type="checkbox">
-                <div class="task-info">
-                    <div class="task-title">整理数据库实验报告</div>
-                    <div class="task-course">数据库原理</div>
-                </div>
-                <span class="task-status">进行中</span>
-            </div>
-
-            <div class="task-item">
-                <input type="checkbox">
-                <div class="task-info">
-                    <div class="task-title">预习数据结构课程</div>
-                    <div class="task-course">数据结构</div>
-                </div>
-                <span class="task-status">进行中</span>
-                </div>
-            </div>>
+            <div id="taskList"></div>
         </section>
     </main>
 </div>
@@ -326,17 +299,29 @@
     // 当前选中的页面：all、today、completed
     let currentPage = "all";
 
+    // 日期统一用 YYYY-MM-DD，"今日任务"筛选靠它
+    function today() {
+        return new Date().toLocaleDateString("en-CA");
+    }
+
     // 读取保存的任务；首次打开时创建默认任务
     let tasks = JSON.parse(localStorage.getItem("tasks"));
 
     if (tasks === null) {
         tasks = [
-            { name: "完成 Java 基础复习", completed: true },
-            { name: "整理数据库实验报告", completed: false },
-            { name: "预习数据结构课程", completed: false }
+            { name: "完成 Java 基础复习", course: "Java 程序设计", completed: true, date: today() },
+            { name: "整理数据库实验报告", course: "数据库原理", completed: false, date: today() },
+            { name: "预习数据结构课程", course: "数据结构", completed: false, date: today() }
         ];
-
         saveTasks();
+    } else {
+        // 兼容旧数据：早期版本没存 date / course，补上后「今日任务」才不会永远空白
+        let changed = false;
+        tasks.forEach(function(task) {
+            if (!task.date) { task.date = today(); changed = true; }
+            if (!task.course) { task.course = "未分类"; changed = true; }
+        });
+        if (changed) saveTasks();
     }
 
     // 保存任务到浏览器
@@ -368,7 +353,7 @@
             }
 
             if (currentPage === "today") {
-                return task.date === new Date().toLocaleDateString("en-CA");
+                return task.date === today();
             }
 
             return true;
@@ -382,13 +367,15 @@
                 <input type="checkbox" ${task.completed ? "checked" : ""}>
                 <div class="task-info">
                     <div class="task-title"></div>
-                    <div class="task-course">未分类</div>
+                    <div class="task-course"></div>
                 </div>
                 <span class="task-status">${task.completed ? "已完成" : "进行中"}</span>
                 <button class="delete-button">删除</button>
             `;
 
+            // 用 textContent 赋值：用户输入永远只是文字，不会被当成 HTML 执行
             newTask.querySelector(".task-title").textContent = task.name;
+            newTask.querySelector(".task-course").textContent = task.course || "未分类";
 
             // 删除任务
             newTask.querySelector(".delete-button").addEventListener("click", function() {
@@ -410,14 +397,18 @@
         updateStats();
     }
 
-    // 添加任务
+    // 添加任务：名称、课程、创建日期一起存，字段和 Java 版对齐
     addTaskBtn.addEventListener("click", function() {
         const taskName = prompt("请输入任务名称：");
 
         if (taskName && taskName.trim() !== "") {
+            const course = prompt("请输入课程分类（可留空）：");
+
             tasks.push({
                 name: taskName.trim(),
-                completed: false
+                course: course && course.trim() !== "" ? course.trim() : "未分类",
+                completed: false,
+                date: today()
             });
 
             saveTasks();
@@ -440,6 +431,7 @@
     });
 
     // 首次显示任务
+    document.getElementById("dateLabel").textContent = today();
     renderTasks();
 </script>
 </body>

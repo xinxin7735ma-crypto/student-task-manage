@@ -1,88 +1,114 @@
 import java.nio.charset.StandardCharsets;
 import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class TaskManager {
     ArrayList<Task>tasks = new ArrayList<>();
     //添加任务：把传入的任务放进任务列表
-    public void addTask(Task task)
+    //添加任务：先写数据库，成功后才加进内存列表
+    public void addTask(String title, String course)
     {
-        tasks.add(task);
-        saveToFile();
+        String sql = "INSERT INTO dbo.tasks (title, course, completed) VALUES (?, ?, 0)";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setString(1, title);
+            ps.setString(2, course);
+            ps.executeUpdate();
+            tasks.clear();
+            loadFromDb();      // 重新从库里读，拿到数据库生成的 id
+        } catch (SQLException e)
+        {
+            System.out.println("添加失败：" + e.getMessage());
+        }
     }
+
     //删除任务：根据下标删除对应任务（remove：下标 index:任务在列表中的位置）
     public void deleteTask(int index)
     {
-        tasks.remove(index);
-        saveToFile();
+        String sql ="DELETE FROM dbo.tasks WHERE id =?";
+        try(Connection conn =DBUtil.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setInt(1,tasks.get(index).getId());
+            ps.executeUpdate();
+            tasks.remove(index);
+        } catch (SQLException e)
+        {
+            System.out.println("删除失败："+e.getMessage());
+        }
+
     }
-    //修改任务
+    //修改任务：先更新数据库，成功后才更新内存列表
     public void updateTask(int index, String title, String course)
     {
-        Task task = tasks.get(index);
-        task.setTitle(title);//名称
-        task.setCourse(course);//课程
-        saveToFile();
+        String sql = "UPDATE dbo.tasks SET title = ?, course = ? WHERE id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setString(1, title);
+            ps.setString(2, course);
+            ps.setInt(3, tasks.get(index).getId());
+            ps.executeUpdate();
+
+            Task task = tasks.get(index);
+            task.setTitle(title);
+            task.setCourse(course);
+        } catch (SQLException e)
+        {
+            System.out.println("修改失败：" + e.getMessage());
+        }
     }
     //标记状态：找到指定任务，并标记为已完成
     public void markCompleted(int index)
     {
-        tasks.get(index).markCompleted();
-        saveToFile();
+        String sql = "UPDATE dbo.tasks SET completed = 1 WHERE id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setInt(1, tasks.get(index).getId());
+            ps.executeUpdate();
+
+            tasks.get(index).markCompleted();
+        } catch (SQLException e)
+        {
+            System.out.println("标记失败：" + e.getMessage());
+        }
     }
     //查看任务:获取任务列表，返回当前保存的所有任务
     public ArrayList<Task> getTasks()
     {
         return tasks;
     }
-    //存档
-    public void saveToFile()
-    {
-        try {
-            FileWriter writer = new FileWriter("tasks.txt", StandardCharsets.UTF_8);
-            System.out.println(new java.io.File("tasks.txt").getAbsolutePath());
-            for (Task task : tasks)
-            {
-                writer.write(task.getTitle() + ","
-                        + task.getCourse() + ","
-                        + task.isCompleted() + "\n");
-            }
-            writer.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-    }
     //读档
-    public void loadFromFile()
-    {
-        try
+    public void loadFromDb()
         {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("tasks.txt"),StandardCharsets.UTF_8));
-            String line;
-            while ((line = reader.readLine()) != null)
+            tasks.clear();
+            String sql = "SELECT id,title,course,completed FROM dbo.tasks ORDER BY id";
+            try(Connection conn = DBUtil.getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql))
             {
-                String[] data = line.split(",",3);
-                if(data.length < 3)
+                while(rs.next())
                 {
-                continue;
+                    int id = rs.getInt("id");
+                    Task task = new Task(id,rs.getString("title"),rs.getString("course"));
+                    if(rs.getBoolean("completed"))
+                    {
+                        task.markCompleted();
+                    }
+                    tasks.add(task);
+
                 }
-                Task task = new Task(data[0],data[1]);
-                if("ture".equals(data[2].trim()))
-                {
-                    task.markCompleted();
-                }
+
             }
-
-            reader.close();
-
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            catch(SQLException e)
+            {
+                System.out.println("数据库读取失败："+e.getMessage());
+            }
         }
-    }
+    //读档
+
 }
 

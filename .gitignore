@@ -12,3 +12,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# 本地数据库配置（含密码，绝不提交）
+db.properties
