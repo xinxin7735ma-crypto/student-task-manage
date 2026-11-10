@@ -24,6 +24,7 @@ public class Task {
     public void markCompleted() {
         completed = true;
     }
+    public void setCompleted(boolean completed){this.completed = completed;}
     //修改
     public void setTitle(String title)
     {
@@ -35,7 +36,8 @@ public class Task {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         String status = completed ? "已完成" : "未完成";
         return "[" + status + "] " + course + " - " + title;
     }

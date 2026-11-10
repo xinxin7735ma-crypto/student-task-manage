@@ -12,25 +12,30 @@ public class Main {
         System.out.println("======任务管理系统======");
         System.out.println("1. 查看任务");
         System.out.println("2. 添加任务");
-        System.out.println("3. 标记完成");
+        System.out.println("3. 切换完成状态");
         System.out.println("4. 删除任务");
         System.out.println("5. 修改任务");
         System.out.println("6. 退出");
         System.out.println("请输入选择：");
-        while (true) {
+        while (true)
+        {
             int choice;
 
-            try {
+            try
+            {
                 choice = scanner.nextInt();
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 System.out.println("请输入数字！");
                 scanner.nextLine();
                 continue;
             }
-            switch (choice) {
+            switch (choice)
+            {
                 case 1:
                     System.out.println("我的任务列表：");
-                    for (int i = 0; i < manager.getTasks().size(); i++) {
+                    for (int i = 0; i < manager.getTasks().size(); i++)
+                    {
                         System.out.println((i + 1) + "." + manager.getTasks().get(i));
                     }
                     break;
@@ -48,14 +53,14 @@ public class Main {
 
 
                 case 3:
-                    System.out.println("请输入要完成的任务编号");
+                    System.out.println("请输入要切换的任务编号");
                     int index = scanner.nextInt();
 
                     if (index > 0 && index <= manager.getTasks().size())
                     {
 
-                        manager.markCompleted(index - 1);
-                        System.out.println("任务已完成！");
+                        manager.toggleCompleted(index - 1);
+                        System.out.println("切换完成状态");
 
                     } else
                     {
@@ -106,6 +111,9 @@ public class Main {
                 case 6:
                     System.out.println("退出");
                     return;
+                default:
+                    System.out.println("没有这个选项，请输入1-6");
+                    break;
             }
 
         }

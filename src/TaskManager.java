@@ -1,11 +1,8 @@
-import java.nio.charset.StandardCharsets;
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 
 public class TaskManager {
     ArrayList<Task>tasks = new ArrayList<>();
-    //添加任务：把传入的任务放进任务列表
     //添加任务：先写数据库，成功后才加进内存列表
     public void addTask(String title, String course)
     {
@@ -51,7 +48,6 @@ public class TaskManager {
             ps.setString(2, course);
             ps.setInt(3, tasks.get(index).getId());
             ps.executeUpdate();
-
             Task task = tasks.get(index);
             task.setTitle(title);
             task.setCourse(course);
@@ -60,20 +56,22 @@ public class TaskManager {
             System.out.println("修改失败：" + e.getMessage());
         }
     }
-    //标记状态：找到指定任务，并标记为已完成
-    public void markCompleted(int index)
+    //切换完成状态：先写数据库，成功后才更新内存列表
+    public void toggleCompleted(int index)
     {
-        String sql = "UPDATE dbo.tasks SET completed = 1 WHERE id = ?";
+        String sql = "UPDATE dbo.tasks SET completed = ? WHERE id = ?";
+        boolean target = !tasks.get(index).isCompleted();
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql))
         {
-            ps.setInt(1, tasks.get(index).getId());
+            ps.setBoolean(1,target);
+            ps.setInt(2, tasks.get(index).getId());
             ps.executeUpdate();
 
-            tasks.get(index).markCompleted();
+            tasks.get(index).setCompleted(target);
         } catch (SQLException e)
         {
-            System.out.println("标记失败：" + e.getMessage());
+            System.out.println("切换失败：" + e.getMessage());
         }
     }
     //查看任务:获取任务列表，返回当前保存的所有任务
@@ -81,7 +79,7 @@ public class TaskManager {
     {
         return tasks;
     }
-    //读档
+    //从数据库加载全部任务
     public void loadFromDb()
         {
             tasks.clear();
@@ -108,7 +106,5 @@ public class TaskManager {
                 System.out.println("数据库读取失败："+e.getMessage());
             }
         }
-    //读档
 
 }
-
